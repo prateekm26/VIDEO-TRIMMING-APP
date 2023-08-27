@@ -2,16 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:videotask/res/video_clips.dart';
 
-class VideoFrames extends StatefulWidget {
+class VideoThumbnailsWidget extends StatefulWidget {
   final List<VideoClip>? playList;
 
-  const VideoFrames({Key? key, this.playList}) : super(key: key);
+  const VideoThumbnailsWidget({Key? key, this.playList}) : super(key: key);
 
   @override
-  State<VideoFrames> createState() => _VideoFramesState();
+  State<VideoThumbnailsWidget> createState() => _VideoThumbnailsWidgetState();
 }
 
-class _VideoFramesState extends State<VideoFrames> {
+class _VideoThumbnailsWidgetState extends State<VideoThumbnailsWidget> {
   List<VideoClip> playList = [];
   List<Uint8List> thumbnails = [];
   @override

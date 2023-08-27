@@ -42,7 +42,8 @@ class HomeProvider extends ChangeNotifier {
       VideoClip.clips[i].thumbnails.clear();
       for (int j = 0; j < 10; j++) {
         final byte = await generateThumbnails(
-            videoPath: VideoClip.clips[i].videoPath(), timeMs: 1000 + j);
+            videoPath: VideoClip.clips[i].videoPath(),
+            timeMs: 100000000 * (j + 10));
         VideoClip.clips[i].thumbnails.add(byte!);
       }
     }

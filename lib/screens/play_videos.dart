@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
-import 'package:videotask/Screens/video_frames.dart';
 import 'package:videotask/providers/video_player_provider.dart';
 import 'package:videotask/res/colors.dart';
 import 'package:videotask/res/video_clips.dart';
+import 'package:videotask/screens/thumbnails_widget.dart';
 
 class PlayVideos extends StatefulWidget {
   final List<VideoClip>? playList;
@@ -49,7 +49,7 @@ class _PlayVideosState extends State<PlayVideos> {
   }
 
   void _initPlayer(int index, {bool seek = false}) async {
-    log("_initializeAndPlay ---------> $index");
+    log("playing index____ $index");
     final clip = playList[index];
     final controller = VideoPlayerController.asset(clip.videoPath());
     final old = _controller;
@@ -57,12 +57,9 @@ class _PlayVideosState extends State<PlayVideos> {
     if (old != null) {
       old.removeListener(_onControllerUpdated);
       old.pause();
-      debugPrint("---- old contoller paused.");
     }
-    debugPrint("---- controller changed.");
     _playerProvider!.refreshState();
     controller.initialize().then((_) {
-      debugPrint("---- controller initialized");
       old?.dispose();
       _playingIndex = index;
       _duration = null;
@@ -118,12 +115,9 @@ class _PlayVideosState extends State<PlayVideos> {
     if (_playerProvider!.isPlaying != playing || _isEndOfClip != isEndOfClip) {
       _playerProvider!.isPlaying = playing;
       _isEndOfClip = isEndOfClip;
-      debugPrint(
-          "updated -----> isPlaying=$playing / isEndOfClip=$isEndOfClip");
+      log("updated -----> isPlaying=$playing / isEndOfClip=$isEndOfClip");
       if (isEndOfClip && playing) {
         /// one clip completed handle next clip
-        debugPrint(
-            "========================== End of Clip / Handle NEXT ========================== ");
         final isComplete = _playingIndex == playList.length - 1;
         if (isComplete) {
           log("played all!!");
@@ -146,13 +140,13 @@ class _PlayVideosState extends State<PlayVideos> {
       backgroundColor: Colors.black87,
       appBar: _appBar(),
       body: Padding(
-        padding: const EdgeInsets.all(0.0),
+        padding: const EdgeInsets.only(bottom: 10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _videoPreview(),
             _durationText(),
-            progressBar(),
+            // progressBar(),
             frameRangeSlider()
           ],
         ),
@@ -176,7 +170,7 @@ class _PlayVideosState extends State<PlayVideos> {
 
   _videoPreview() {
     return Container(
-      height: MediaQuery.of(context).size.height - 180,
+      height: MediaQuery.of(context).size.height - 200,
       // width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           color: Colors.black, borderRadius: BorderRadius.circular(20)),
@@ -203,7 +197,7 @@ class _PlayVideosState extends State<PlayVideos> {
         aspectRatio: 9 / 16,
         child: Center(
             child: CircularProgressIndicator(
-          color: Colors.orange,
+          color: AppColors.orangeColor,
         )),
       );
     }
@@ -220,6 +214,7 @@ class _PlayVideosState extends State<PlayVideos> {
     }
   }
 
+  /// total video duration widget
   _durationText() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -235,10 +230,10 @@ class _PlayVideosState extends State<PlayVideos> {
     );
   }
 
-// progress bar widget
+  /// progress bar widget
   Widget progressBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
       child: LinearProgressIndicator(
         value: _position == null
             ? 0.0
@@ -250,22 +245,22 @@ class _PlayVideosState extends State<PlayVideos> {
     );
   }
 
-// frame slider and thumbnails
+  /// frame range slider and thumbnails
   Widget frameRangeSlider() {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: VideoFrames(playList: playList),
+          child: VideoThumbnailsWidget(playList: playList),
         ),
         SliderTheme(
           data: SliderThemeData(
               minThumbSeparation: 0,
-              thumbColor: AppColors.orangeColor,
+              thumbColor: AppColors.whiteColor,
               trackHeight: 60,
               inactiveTrackColor: Colors.transparent,
-              activeTrackColor: AppColors.orangeColor.withOpacity(0.25)),
+              activeTrackColor: AppColors.whiteColor.withOpacity(0.5)),
           child: RangeSlider(
             min: 0,
             max: getMaxDuration(),

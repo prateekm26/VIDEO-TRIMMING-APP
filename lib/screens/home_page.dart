@@ -40,10 +40,22 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Select Videos"),
       ),
       body: _homeProvider!.loading
-          ? const Center(
-              child: CircularProgressIndicator(
-              color: AppColors.orangeColor,
-            ))
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Center(
+                    child: CircularProgressIndicator(
+                  color: AppColors.orangeColor,
+                )),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Please wait..",
+                  style: TextStyle(color: AppColors.orangeColor, fontSize: 18),
+                )
+              ],
+            )
           : Column(
               children: [
                 _videoGrid(),
@@ -106,7 +118,9 @@ class _HomePageState extends State<HomePage> {
             height: 55,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
-                color: AppColors.orangeColor),
+                color: _homeProvider!.loading
+                    ? AppColors.grey.withOpacity(0.5)
+                    : AppColors.orangeColor),
             child: const Padding(
               padding: EdgeInsets.all(15.0),
               child: Center(
