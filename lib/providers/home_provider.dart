@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -67,7 +68,7 @@ class HomeProvider extends ChangeNotifier {
         quality: 70,
         timeMs: timeMs);
 
-    print("result----$result");
+    log("result----$result");
     return result;
   }
 

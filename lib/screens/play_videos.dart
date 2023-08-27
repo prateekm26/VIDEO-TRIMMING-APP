@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -47,7 +49,7 @@ class _PlayVideosState extends State<PlayVideos> {
   }
 
   void _initPlayer(int index, {bool seek = false}) async {
-    print("_initializeAndPlay ---------> $index");
+    log("_initializeAndPlay ---------> $index");
     final clip = playList[index];
     final controller = VideoPlayerController.asset(clip.videoPath());
     final old = _controller;
@@ -94,7 +96,7 @@ class _PlayVideosState extends State<PlayVideos> {
     if (duration == null) return;
     var position = await controller.position;
     _position = position!;
-    print("position: $_position");
+    log("position: $_position");
     final playing = controller.value.isPlaying;
     final isEndOfClip = position.inMilliseconds > 0 &&
         position.inSeconds + 1 >= duration.inSeconds;
@@ -105,8 +107,7 @@ class _PlayVideosState extends State<PlayVideos> {
     if (playing) {
       // handle progress indicator
       if (_disposed) return;
-      print(
-          "progress### $_progress , end-- ${_playerProvider!.rangeValues.end}");
+      log("progress### $_progress , end-- ${_playerProvider!.rangeValues.end}");
 
       if (_progress >= _playerProvider!.rangeValues.end) {
         controller.pause();
@@ -125,9 +126,9 @@ class _PlayVideosState extends State<PlayVideos> {
             "========================== End of Clip / Handle NEXT ========================== ");
         final isComplete = _playingIndex == playList.length - 1;
         if (isComplete) {
-          print("played all!!");
+          log("played all!!");
         } else {
-          print("playNext");
+          log("playNext");
           _initPlayer(_playingIndex + 1);
         }
       }
@@ -227,7 +228,7 @@ class _PlayVideosState extends State<PlayVideos> {
         children: [
           Text(
             "${(_playerProvider!.rangeValues.end - _playerProvider!.rangeValues.start).round()}s",
-            style: TextStyle(color: AppColors.whiteColor),
+            style: const TextStyle(color: AppColors.whiteColor),
           ),
         ],
       ),
@@ -276,7 +277,7 @@ class _PlayVideosState extends State<PlayVideos> {
             },
             onChangeStart: (startVal) {
               _controller?.pause();
-              _position = Duration(seconds: 0);
+              _position = const Duration(seconds: 0);
               _globalPosition = 0.0;
             },
             onChangeEnd: (endVal) {
@@ -312,7 +313,7 @@ class _PlayVideosState extends State<PlayVideos> {
     }
     for (int i = 0; i < durationList.length; i++) {
       if (durationList[i] >= progress) {
-        print("index ##### $i");
+        log("index ##### $i");
         return i;
       }
     }
@@ -332,7 +333,7 @@ class _PlayVideosState extends State<PlayVideos> {
     }
     pos =
         index == 0 ? progress.round() : durationList[index] - progress.round();
-    print("pos ##### $pos");
+    log("pos ##### $pos");
     return pos;
   }
 }
