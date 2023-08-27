@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:videotask/Screens/play_videos.dart';
 import 'package:videotask/providers/home_provider.dart';
@@ -25,10 +24,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      // _homeProvider!.loading=true;
-      _homeProvider!.setThumbnails();
-    });
+    _init();
   }
 
   Widget _mainWidget() {
@@ -151,5 +147,9 @@ class _HomePageState extends State<HomePage> {
                     playList: _homeProvider!.playList,
                   ))).then((value) => _homeProvider!.clearPlayList());
     }
+  }
+
+  void _init() async {
+    await _homeProvider!.setInitThumbnails(VideoClip.clips, count: 1);
   }
 }

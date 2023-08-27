@@ -17,10 +17,10 @@ class VideoClip {
   }
 
   static List<VideoClip> clips = [
-    VideoClip("Summer", "song1.mp4", 29, "assets/videos/", []),
-    VideoClip("Summer", "song2.mp4", 41, "assets/videos/", []),
-    VideoClip("Summer", "song3.mp4", 31, "assets/videos/", []),
-    VideoClip("Summer", "song4.mp4", 30, "assets/videos/", []),
-    VideoClip("Summer", "song5.mp4", 30, "assets/videos/", [])
+    VideoClip("Song1", "song1.mp4", 29, "assets/videos/", []),
+    VideoClip("Song2", "song2.mp4", 41, "assets/videos/", []),
+    VideoClip("Song3", "song3.mp4", 31, "assets/videos/", []),
+    VideoClip("Song4", "song4.mp4", 30, "assets/videos/", []),
+    VideoClip("Song5", "song5.mp4", 30, "assets/videos/", [])
   ];
 }

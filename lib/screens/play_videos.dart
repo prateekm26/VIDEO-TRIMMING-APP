@@ -44,6 +44,7 @@ class _PlayVideosState extends State<PlayVideos> {
     if (widget.playList != null) {
       playList = widget.playList!;
     }
+    _initThumbnails();
     _playerProvider!.rangeValues = RangeValues(0, getMaxDuration());
     _initPlayer(0);
   }
@@ -193,12 +194,24 @@ class _PlayVideosState extends State<PlayVideos> {
         ),
       );
     } else {
-      return const AspectRatio(
+      return AspectRatio(
         aspectRatio: 9 / 16,
-        child: Center(
-            child: CircularProgressIndicator(
-          color: AppColors.orangeColor,
-        )),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Center(
+                child: CircularProgressIndicator(
+              color: AppColors.orangeColor,
+            )),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "Loading..",
+              style: TextStyle(color: AppColors.orangeColor, fontSize: 18),
+            )
+          ],
+        ),
       );
     }
   }
@@ -250,6 +263,9 @@ class _PlayVideosState extends State<PlayVideos> {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
+        /* _playerProvider!.loading
+            ? Container()
+            :*/
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: VideoThumbnailsWidget(playList: playList),
@@ -330,5 +346,9 @@ class _PlayVideosState extends State<PlayVideos> {
         index == 0 ? progress.round() : durationList[index] - progress.round();
     log("pos ##### $pos");
     return pos;
+  }
+
+  void _initThumbnails() async {
+    await _playerProvider!.setThumbnails(playList, count: 10);
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -35,16 +34,15 @@ class HomeProvider extends ChangeNotifier {
   }
 
   /// set thumbnails in playlist
-  void setThumbnails() async {
+  Future<void> setInitThumbnails(List<VideoClip> clips,
+      {int count = 10}) async {
     _loading = true;
     notifyListeners();
-    for (int i = 0; i < VideoClip.clips.length; i++) {
-      VideoClip.clips[i].thumbnails.clear();
+    for (int i = 0; i < clips.length; i++) {
+      final byte = await generateThumbnails(
+          videoPath: clips[i].videoPath(), timeMs: 100000000 * (i + 10));
       for (int j = 0; j < 10; j++) {
-        final byte = await generateThumbnails(
-            videoPath: VideoClip.clips[i].videoPath(),
-            timeMs: 100000000 * (j + 10));
-        VideoClip.clips[i].thumbnails.add(byte!);
+        clips[i].thumbnails.add(byte!);
       }
     }
     _loading = false;
@@ -65,11 +63,11 @@ class HomeProvider extends ChangeNotifier {
     final result = await VideoThumbnail.thumbnailData(
         video: tempVideo.path,
         imageFormat: ImageFormat.PNG,
-        maxWidth: 250,
-        quality: 70,
+        maxWidth: 150,
+        quality: 25,
         timeMs: timeMs);
 
-    log("result----$result");
+    //log("result----$result");
     return result;
   }
 
