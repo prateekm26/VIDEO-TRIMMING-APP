@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:videotask/providers/video_player_provider.dart';
@@ -44,9 +45,11 @@ class _PlayVideosState extends State<PlayVideos> {
     if (widget.playList != null) {
       playList = widget.playList!;
     }
-    _initThumbnails();
-    _playerProvider!.rangeValues = RangeValues(0, getMaxDuration());
-    _initPlayer(0);
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _initThumbnails();
+      _playerProvider!.rangeValues = RangeValues(0, getMaxDuration());
+      _initPlayer(0);
+    });
   }
 
   void _initPlayer(int index, {bool seek = false}) async {
